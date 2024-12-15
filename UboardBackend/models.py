@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Gym(models.Model):
     id = models.BigAutoField()
@@ -11,7 +12,7 @@ class Wall(models.Model):
     name = models.CharField()
     angle = models.FloatField()
     size = models.CharField(max_length=15)
-    # wall img = blob???
+    image = models.ImageField(upload_to='walls/')
 
 class Climb(models.Model):
     wall_id = models.ForeignKey(Wall, on_delete=models.CASCADE)
@@ -21,3 +22,23 @@ class Climb(models.Model):
     rating = models.IntegerField()
     # climb = ml learning object??
     # key = ???
+
+class Saved_Gym:
+    id = models.BigAutoField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
+
+class Saved_Wall:
+    id = models.BigAutoField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    wall = models.ForeignKey(Wall, on_delete=models.CASCADE)
+
+class Saved_Climb:
+    id = models.BigAutoField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    climb = models.ForeignKey(Climb, on_delete=models.CASCADE)
+
+class Climbing_Log:
+    id = models.BigAutoField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    climb = models.ForeignKey(Climb, on_delete=models.CASCADE)
