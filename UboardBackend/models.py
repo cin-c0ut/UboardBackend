@@ -13,6 +13,11 @@ class Wall(models.Model):
     angle = models.FloatField()
     size = models.CharField(max_length=15)
     image = models.ImageField(upload_to='walls/')
+    boxes = models.JSONField()
+    confidences = models.JSONField()
+    classes = models.JSONField()
+    masks = models.JSONField(null=True)
+
 
 class Climb(models.Model):
     wall_id = models.ForeignKey(Wall, on_delete=models.CASCADE)
@@ -20,7 +25,10 @@ class Climb(models.Model):
     name = models.CharField()
     grade = models.CharField(max_length=15)
     rating = models.IntegerField()
-    # climb = ml learning object??
+    holds = models.JSONField() # Will hold array of ints corresponding to which holds will be used
+                               # each int corresponds to a bounding box in Wall class
+    # Not sure how to integrate how what each hold is (foot only, hand only, start, end)
+        # maybe do separate class??
     # key = ???
 
 class Saved_Gym:
