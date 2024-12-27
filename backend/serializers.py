@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from backend.models import Gym, Wall, Climb, Saved_Gym, Saved_Wall, Saved_Climb, Climbing_Log
+from django.contrib.auth.models import User
 
 class GymSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,6 +16,8 @@ class ClimbSerializer(serializers.ModelSerializer):
     class Meta:
         model = Climb
         fields = '__all__'
+    
+    user_id = serializers.ReadOnlyField(source='user_id.username')
 
 class Saved_GymSerializer(serializers.ModelSerializer):
     class Meta:
@@ -35,3 +38,11 @@ class Climbing_LogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Climbing_Log
         fields = '__all__'
+
+class UserSerializer(serializers.ModelSerializer):
+    climbs = serializers.PrimaryKeyRelatedField(many=True,
+                                                queryset=Climb.objects.all())
+    
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'climbs']

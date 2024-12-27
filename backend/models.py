@@ -21,6 +21,7 @@ class Wall(models.Model):
 
 class Climb(models.Model):
     wall_id = models.ForeignKey(Wall, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, related_name='climbs', on_delete=models.CASCADE)
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=200)
     grade = models.CharField(max_length=15)
