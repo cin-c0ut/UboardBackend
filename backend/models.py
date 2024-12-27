@@ -13,7 +13,7 @@ class Wall(models.Model):
     angle = models.FloatField()
     size = models.CharField(max_length=15)
     image = models.ImageField(upload_to='walls/')
-    boxes = models.JSONField()
+    boxes = models.JSONField() 
     confidences = models.JSONField()
     classes = models.JSONField()
     masks = models.JSONField(null=True)

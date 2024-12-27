@@ -1,36 +1,37 @@
 from rest_framework import serializers
-from backend.models import Gym, Wall, Climb, Saved_Gym, Saved_Wall, Saved_Climb
+from backend.models import Gym, Wall, Climb, Saved_Gym, Saved_Wall, Saved_Climb, Climbing_Log
 
 class GymSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gym
-        field = '__all__'
+        fields = '__all__'
 
 class WallSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wall
-        field = '__all__'
+        fields = '__all__'
 
 class ClimbSerializer(serializers.ModelSerializer):
     class Meta:
         model = Climb
-        field = '__all__'
+        fields = '__all__'
 
-class Saved_Gym(serializers.ModelSerializer):
+class Saved_GymSerializer(serializers.ModelSerializer):
     class Meta:
         model = Saved_Gym
-        field = '__all__'
+        fields = '__all__'
 
-class Saved_Wall(serializers.ModelSerializer):
+class Saved_WallSerializer(serializers.ModelSerializer):
     class Meta:
         model = Saved_Wall
-        field = '__all__'
+        fields = '__all__'
 
-class Saved_Climb(serializers.ModelSerializer):
+class Saved_ClimbSerializer(serializers.ModelSerializer):
     class Meta:
         model = Saved_Climb
-        field = '__all__'
+        fields = '__all__'
 
-class Climbing_Log(serializers.ModelSerializer):
+class Climbing_LogSerializer(serializers.ModelSerializer):
     class Meta:
-        field = '__all__'
+        model = Climbing_Log
+        fields = '__all__'
