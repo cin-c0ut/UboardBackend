@@ -1,51 +1,35 @@
-from backend.models import Gym, Wall, Climb, Saved_Gym, Saved_Wall, Saved_Climb, Climbing_Log
+from backend.models import Gym, Wall, Climb, Profile, Climbing_Log
 from django.contrib.auth.models import User
-from backend.serializers import GymSerializer, WallSerializer, ClimbSerializer, Saved_GymSerializer, Saved_WallSerializer, Saved_ClimbSerializer, UserSerializer
+from backend.serializers import GymSerializer, WallSerializer, ClimbSerializer, ProfileSerializer, ClimbingLogSerializer
 from backend.permissions import IsOwnerOrReadOnly
-from rest_framework import generics, permissions
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
+from rest_framework import viewsets, permissions
 
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'gyms': reverse('gym-list', request=request, format=format)
-    })
-
-class GymList(generics.ListCreateAPIView):
-    """
-    List all gyms, or create a new gym
-    """
-    queryset = Gym.objects.all()
-    serializer_class = GymSerializer
-    
-class GymDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Retrieve, update, or delete gym.
-    """
+class GymViewSet(viewsets.ModelViewSet):
     queryset = Gym.objects.all()
     serializer_class = GymSerializer
 
-class ClimbList(generics.ListCreateAPIView):
-    queryset = Climb.objects.all()
-    serializer_class = ClimbSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+class WallViewSet(viewsets.ModelViewSet):
+    queryset = Wall.objects.all()
+    serializer_class = WallSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-
-class ClimbDetail(generics.RetrieveUpdateDestroyAPIView):
+class ClimbViewSet(viewsets.ModelViewSet):
+    """
+    This ViewSet automatically provides 'list' and 'CRUD' actions.
+    """
     queryset = Climb.objects.all()
     serializer_class = ClimbSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
+    
+    def perform_create(self, serializer):
+        serializer.save(profile=self.request.user)
 
-class UserList(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
-class UserDetail(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+class ClimbingLogViewSet(viewsets.ModelViewSet):
+    queryset = Climbing_Log.objects.all()
+    serializer_class = ClimbingLogSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly]
