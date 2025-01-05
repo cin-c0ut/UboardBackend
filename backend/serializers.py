@@ -39,9 +39,10 @@ class Climbing_LogSerializer(serializers.ModelSerializer):
         model = Climbing_Log
         fields = '__all__'
 
-class UserSerializer(serializers.ModelSerializer):
-    climbs = serializers.PrimaryKeyRelatedField(many=True,
-                                                queryset=Climb.objects.all())
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    climbs = serializers.HyperlinkedRelatedField(many=True,
+                                                 view_name='climb-detail',
+                                                 read_only=True)
     
     class Meta:
         model = User

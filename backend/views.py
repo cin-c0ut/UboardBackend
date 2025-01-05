@@ -3,6 +3,16 @@ from django.contrib.auth.models import User
 from backend.serializers import GymSerializer, WallSerializer, ClimbSerializer, Saved_GymSerializer, Saved_WallSerializer, Saved_ClimbSerializer, UserSerializer
 from backend.permissions import IsOwnerOrReadOnly
 from rest_framework import generics, permissions
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('user-list', request=request, format=format),
+        'gyms': reverse('gym-list', request=request, format=format)
+    })
 
 class GymList(generics.ListCreateAPIView):
     """
