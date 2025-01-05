@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 class Gym(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -18,10 +19,18 @@ class Wall(models.Model):
     classes = models.JSONField()
     masks = models.JSONField(null=True)
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+    saved_walls = models.ManyToManyField(Wall, blank=True)
+    saved_climbs = models.ManyToManyField('Climb', related_name='profile_saved', blank=True)
+    logged_climbs = models.ManyToManyField('Climb', related_name='profile_logged',
+                                          through='Climbing_Log',
+                                          blank=True)
+    saved_gyms = models.ManyToManyField(Gym, blank=True)
 
 class Climb(models.Model):
     wall_id = models.ForeignKey(Wall, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(User, related_name='climbs', on_delete=models.CASCADE)
+    user_id = models.ForeignKey(Profile, related_name='climbs', on_delete=models.CASCADE)
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=200)
     grade = models.CharField(max_length=15)
@@ -31,22 +40,7 @@ class Climb(models.Model):
     # Not sure how to integrate how what each hold is (foot only, hand only, start, end)
         # maybe do separate class??
 
-class Saved_Gym:
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    gym = models.ForeignKey(Gym, on_delete=models.CASCADE)
-
-class Saved_Wall:
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    wall = models.ForeignKey(Wall, on_delete=models.CASCADE)
-
-class Saved_Climb:
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class Climbing_Log(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     climb = models.ForeignKey(Climb, on_delete=models.CASCADE)
-
-class Climbing_Log:
-    id = models.BigAutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    climb = models.ForeignKey(Climb, on_delete=models.CASCADE)
+    date_logged = models.DateTimeField(default=timezone.now)
