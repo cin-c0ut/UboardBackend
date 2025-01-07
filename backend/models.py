@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from backend.utils import hold_detection
+import json
 
 class Gym(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -14,10 +16,23 @@ class Wall(models.Model):
     angle = models.FloatField()
     size = models.CharField(max_length=15)
     image = models.ImageField(upload_to='walls/')
-    boxes = models.JSONField() 
-    confidences = models.JSONField()
-    classes = models.JSONField()
-    masks = models.JSONField(null=True)
+    boxes = models.JSONField(default=list, blank=True) 
+    confidences = models.JSONField(default=list, blank=True)
+    classes = models.JSONField(default=list, blank=True)
+    masks = models.JSONField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        """
+        Call object detection to fill in information from image
+        """
+        if self.image:
+            detection_data = hold_detection(self.image)
+            self.boxes = json.dumps(detection_data['boxes'])
+            self.confidences = json.dumps(detection_data['confidences'])
+            self.classes = json.dumps(detection_data['classes'])
+            self.masks = json.dumps(detection_data['masks'])
+
+        super().save(*args, **kwargs)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
