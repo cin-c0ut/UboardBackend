@@ -2,45 +2,60 @@ from rest_framework import serializers
 from backend.models import Gym, Wall, Profile, Climb, Climbing_Log
 from django.contrib.auth.models import User
 
-class GymSerializer(serializers.ModelSerializer):
+class GymSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Gym
         fields = '__all__'
 
-class WallSerializer(serializers.ModelSerializer):
+class WallSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Wall
         fields = '__all__'
 
-class ClimbSerializer(serializers.ModelSerializer):
+class ClimbSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    user_id = serializers.HyperlinkedRelatedField(read_only=True,
+                                               view_name='profile-detail')
+
     class Meta:
         model = Climb
         fields = '__all__'
-    
-    user_id = serializers.ReadOnlyField(source='user_id.username')
 
-class ClimbingLogSerializer(serializers.ModelSerializer):
+class ClimbingLogSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+    profile = serializers.HyperlinkedRelatedField(queryset=Profile.objects.all(),
+                                                  view_name='profile-detail')
+    climb = serializers.HyperlinkedRelatedField(queryset=Climb.objects.all(),
+                                                view_name='climb-detail')
+    
     class Meta:
         model = Climbing_Log
-        fields = ['id', ]
+        fields = ['id', 'date_logged', 'profile', 'climb']
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = User
         fields = ['id', 'username']        
 
 class ProfileSerializer(serializers.HyperlinkedModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     user = UserSerializer(read_only=True)
-    climbs = serializers.HyperlinkedRelatedField(many=True,
-                                                 view_name='climb-detail',
-                                                 read_only=True)
-    # saved_climbs = serializers.HyperlinkedRelatedField(many=True,
-    #                                                    view_name='climb-log-detail')
-    # saved_gyms = serializers.HyperlinkedRelatedField(many=True,
-    #                                                  view_name='gym-detail')
-    # saved_walls = serializers.HyperlinkedRelatedField(many=True,
-    #                                                   view_name='wall-detail')
+    saved_gyms = serializers.HyperlinkedRelatedField(queryset=Gym.objects.all(),
+                                                     many=True,
+                                                     view_name='gym-detail')
+    saved_walls = serializers.HyperlinkedRelatedField(queryset=Wall.objects.all(),
+                                                      many=True,
+                                                      view_name='wall-detail')
+    saved_climbs = serializers.HyperlinkedRelatedField(queryset=Climb.objects.all(),
+                                                       many=True,
+                                                       view_name='climb-detail')
     
     class Meta:
         model = Profile
-        fields = ['user', 'climbs']
+        fields = ['id', 'user', 'saved_gyms', 'saved_walls', 'saved_gyms', 'saved_climbs']
