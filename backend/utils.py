@@ -5,11 +5,11 @@ import json
 
 def hold_detection(image_file):
     model = YOLO('train4/weights/best.pt')
-    image = cv2.imread(image_file.path)
+    image = cv2.imread(image_file)
+    print(f'image_file: {image_file}')
 
     result = model(image)[0]
     detection_data = {
-        'image_name': image_file.name,
         'boxes' : result.boxes.xyxy.tolist(),
         'confidences': result.boxes.conf.tolist(),
         'classes': result.boxes.cls.tolist(),
