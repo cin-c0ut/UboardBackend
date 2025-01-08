@@ -33,3 +33,6 @@ class ClimbingLogViewSet(viewsets.ModelViewSet):
     serializer_class = ClimbingLogSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
+    
+    def perform_create(self, serializer):
+        serializer.save(profile=self.request.user)
