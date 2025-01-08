@@ -11,4 +11,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
         
         # Write perms only allowed to owner of object
-        return obj.owner == request.user
+        if hasattr(obj, 'user_id'):
+            return obj.user_id == request.user
+        elif hasattr(obj, 'profile'):
+            return obj.profile == request.user
