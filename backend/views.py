@@ -22,7 +22,8 @@ class ClimbViewSet(viewsets.ModelViewSet):
                           IsOwnerOrReadOnly]
     
     def perform_create(self, serializer):
-        serializer.save(profile=self.request.user)
+        currUser = Profile.objects.get(user=self.request.user.id)
+        serializer.save(user_id=currUser)
 
 class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Profile.objects.all()
