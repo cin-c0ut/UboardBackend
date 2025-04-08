@@ -1,10 +1,9 @@
 from django.db import models
-from .wall import Wall
-from .profile import Profile
-
+# from .wall import Wall
+# from .profile import Profile
 class Climb(models.Model):
-    wall_id = models.ForeignKey(Wall, on_delete=models.CASCADE)
-    user_id = models.ForeignKey(Profile, related_name='climbs', on_delete=models.CASCADE)
+    wall_id = models.ForeignKey('Wall', on_delete=models.CASCADE)
+    user_id = models.ForeignKey('Profile', related_name='climbs', on_delete=models.CASCADE)
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=200)
     grade = models.CharField(max_length=15)

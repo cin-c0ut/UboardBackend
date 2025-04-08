@@ -3,11 +3,11 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from backend.utils import hold_detection
 import json
-from .gym import Gym
+# from .gym import Gym
 
 class Wall(models.Model):
     id = models.BigAutoField(primary_key=True)
-    gym_id = models.ForeignKey(Gym, on_delete=models.CASCADE)
+    gym_id = models.ForeignKey('Gym', on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     angle = models.FloatField()
     size = models.CharField(max_length=15)

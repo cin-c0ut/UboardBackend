@@ -134,3 +134,5 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # React Native Dev Server
     #'https://your-production-app.com',  # Your production frontend Whatever we're hosting on
 ]
+
+AUTH_USER_MODEL = 'auth.user'
