@@ -1,14 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-
-from backend import views
+from backend.views import GymViewSet, WallViewSet, ClimbViewSet, ProfileViewSet, ClimbingLogViewSet
 
 router = DefaultRouter()
-router.register(r'gyms', views.GymViewSet, basename='gym')
-router.register(r'walls', views.WallViewSet, basename='wall')
-router.register(r'climbs', views.ClimbViewSet, basename='climb')
-router.register(r'profiles', views.ProfileViewSet, basename='profile')
-router.register(r'climbing_logs', views.ClimbingLogViewSet, basename='climbing_log')
+router.register(r'gyms', GymViewSet, basename='gym')
+router.register(r'walls', WallViewSet, basename='wall')
+router.register(r'climbs', ClimbViewSet, basename='climb')
+router.register(r'profiles', ProfileViewSet, basename='profile')
+router.register(r'climbing_logs', ClimbingLogViewSet, basename='climbing_log')
 
 urlpatterns = [
     path('', include(router.urls)),
