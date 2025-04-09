@@ -9,6 +9,7 @@ router.register(r'walls', views.WallViewSet, basename='wall')
 router.register(r'climbs', views.ClimbViewSet, basename='climb')
 router.register(r'profiles', views.ProfileViewSet, basename='profile')
 router.register(r'climbing_logs', views.ClimbingLogViewSet, basename='climbing_log')
+router.register(r'register', views.CreateUserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -1,8 +1,8 @@
 from backend.models import Gym, Wall, Climb, Profile, Climbing_Log
 from django.contrib.auth.models import User
-from backend.serializers import GymSerializer, WallSerializer, ClimbSerializer, ProfileSerializer, ClimbingLogSerializer
+from backend.serializers import GymSerializer, WallSerializer, ClimbSerializer, ProfileSerializer, ClimbingLogSerializer, CreateUserProfileSerializer
 from backend.permissions import IsOwnerOrReadOnly
-from rest_framework import viewsets, permissions, status
+from rest_framework import mixins, viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -78,3 +78,9 @@ class ClimbingLogViewSet(viewsets.ModelViewSet):
             return Response(serializer.data)
         else:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        
+class CreateUserViewSet(mixins.CreateModelMixin,
+                        mixins.RetrieveModelMixin,
+                        viewsets.GenericViewSet):
+    queryset = User.objects.all()
+    serializer_class = CreateUserProfileSerializer
