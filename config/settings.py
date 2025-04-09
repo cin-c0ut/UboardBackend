@@ -134,3 +134,10 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # React Native Dev Server
     #'https://your-production-app.com',  # Your production frontend Whatever we're hosting on
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
