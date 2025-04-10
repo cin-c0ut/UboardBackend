@@ -78,6 +78,12 @@ from rest_framework.response import Response
 #             return Response(serializer.data)
 #         else:
 #             return Response(status=status.HTTP_404_NOT_FOUND)
+# 
+# class CreateUserViewSet(mixins.CreateModelMixin,
+#                         mixins.RetrieveModelMixin,
+#                         viewsets.GenericViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = CreateUserProfileSerializer
 
 # This file is kept for backward compatibility
 # All views are now in the views/ directory
