@@ -1,7 +1,10 @@
 Booting and useful commands: 
 
 
+booting into a venv: 
 
+Windows10:
+venv310\Scripts\activate
 
 Showing all models: 
 python manage.py shell -c "from django.apps import apps; print('\n'.join([model.__name__ for model in apps.get_models()]))"
