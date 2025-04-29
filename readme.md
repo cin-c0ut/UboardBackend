@@ -24,3 +24,4 @@
 
 ## After Building
 Run `docker compose start` or `docker compose stop` to start and stop the containers.
+Run `docker exec -it uboard-backend bash` to access terminal (and run commands) inside the container.
