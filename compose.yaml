@@ -1,0 +1,34 @@
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+  
+  uboard-backend:
+    build: .
+    container_name: uboard-backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+     SECRET_KEY: ${DJANGO_SECRET_KEY}
+     DEBUG: ${DEBUG}
+     DJANGO_LOGLEVEL: ${DJANGO_LOGLEVEL}
+     DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+     DATABASE_ENGINE: ${DATABASE_ENGINE}
+     DATABASE_NAME: ${DATABASE_NAME}
+     DATABASE_USERNAME: ${DATABASE_USERNAME}
+ 
+     DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+     DATABASE_HOST: ${DATABASE_HOST}
+     DATABASE_PORT: ${DATABASE_PORT}
+    volumes:
+      - .:/app
+
+
