@@ -11,8 +11,10 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        is_user_profile = self.request.user == self.get_object().user
-        context.update({'is_user_profile': is_user_profile})     
+
+        if self.action in ['retrieve', 'update', 'partial_update', 'destroy']:
+            is_user_profile = self.request.user == self.get_object().user
+            context.update({'is_user_profile': is_user_profile})     
         return context
 
     def destroy(self, request, *args, **kwargs):
