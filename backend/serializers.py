@@ -89,31 +89,18 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         user_data.pop('username', None)
 
         instance_user = instance.user
+
+        if 'password' in user_data:
+            newPass = user_data.pop('password')
+            if instance_user.check_password(validated_data["old_password"]):
+                instance_user.set_password(newPass)
+            else:
+                raise serializers.ValidationError({'password': 'Invalid old password.'})
+        
         for field, value in user_data.items():
             setattr(instance_user, field, value)
 
-        if hasattr(user_data, 'password'):
-            print(f"Plaintext type:{type('mypassword')}, validated_data type: {type(validated_data['old_password'])}")
-            print(f"{isinstance(validated_data['old_password'], type('mypassword'))}")
-            print(f"Sanity check: {validated_data['old_password'] == 'mypassword'}")
-            print(f"Django pw check: {instance_user.check_password(str(validated_data['old_password']))}")
-            if instance_user.check_password(validated_data["old_password"]):
-                instance_user.set_password(user_data["password"])
-            else:
-                raise serializers.ValidationError({'password': 'Invalid old password.'})
         instance_user.save()
         instance.save()
 
         return instance
-
-
-class CreateUserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'password', 'first_name', 'last_name']
-        extra_kwargs = {'password': {'write_only': True}}
-    
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        Profile.objects.create(user=user)
-        return user
