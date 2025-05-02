@@ -76,7 +76,6 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         read_only_fields = ['id', 'saved_gyms', 'saved_walls', 'saved_climbs', 'climbs']
 
     def create(self, validated_data):
-        print(f"{validated_data}")
         user_data = validated_data.pop('user')
 
         user = User.objects.create_user(**user_data)
