@@ -92,9 +92,11 @@ class ProfileSerializer(serializers.HyperlinkedModelSerializer):
         for field, value in user_data.items():
             setattr(instance_user, field, value)
 
-        if user_data["password"]:
+        if hasattr(user_data, 'password'):
+            print(f"Plaintext type:{type('mypassword')}, validated_data type: {type(validated_data['old_password'])}")
+            print(f"{isinstance(validated_data['old_password'], type('mypassword'))}")
             print(f"Sanity check: {validated_data['old_password'] == 'mypassword'}")
-            print(f"Django pw check: {instance_user.check_password(validated_data['old_password'])}")
+            print(f"Django pw check: {instance_user.check_password(str(validated_data['old_password']))}")
             if instance_user.check_password(validated_data["old_password"]):
                 instance_user.set_password(user_data["password"])
             else:
