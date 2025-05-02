@@ -1,15 +1,19 @@
-from rest_framework import mixins, viewsets, status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 from backend.models import Profile
 from backend.serializers import ProfileSerializer
+from backend.permissions import IsOwnerOrReadOnly
 
-class ProfileViewSet(mixins.ListModelMixin,
-                     mixins.RetrieveModelMixin,
-                     mixins.UpdateModelMixin,
-                     mixins.DestroyModelMixin,
-                     viewsets.GenericViewSet):
+class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer 
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        is_user_profile = self.request.user == self.get_object().user
+        context.update({'is_user_profile': is_user_profile})     
+        return context
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
