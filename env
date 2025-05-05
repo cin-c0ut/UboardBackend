@@ -1,0 +1,15 @@
+# Database configuration
+DATABASE_ENGINE=django.db.backends.mysql
+DATABASE_NAME=UBoard
+DATABASE_USERNAME=root
+DATABASE_PASSWORD=password
+DATABASE_HOST=db  # This should match the service name in docker-compose.yml
+DATABASE_PORT=3306
+
+# Django configuration
+DJANGO_SECRET_KEY='django-insecure-_ioa))3)uugj0)x)#k_hgwi%#^m)3l+(w^6+eyx3cek&z0zz18'
+DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1,192.168.0.119
+DEBUG=True
+DJANGO_LOGLEVEL=info
+SECRET_KEY='django-insecure-_ioa))3)uugj0)x)#k_hgwi%#^m)3l+(w^6+eyx3cek&z0zz18'
+frontendServer='192.168.0.119:8081'
