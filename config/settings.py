@@ -146,6 +146,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://192.168.0.185:8000',
     'http://localhost:8081',
     'http://localhost:8000',
+    'http://127.0.0.1:8081',
+    'http://127.0.0.1:8000',
+
     #'https://your-production-app.com',  # Your production frontend Whatever we're hosting on
 ]
 
