@@ -12,10 +12,8 @@ class WallViewSet(viewsets.ModelViewSet):
     def filter_gym(self, request):
         gym_pk = request.query_params.get('gym_id')
         queryset = Wall.objects.filter(gym_id=gym_pk)
-        if queryset.exists():
-            serializer = WallSerializer(queryset,
-                                    many=True,
-                                    context={'request': request})
-            return Response(serializer.data)
-        else:
-            return Response(status=status.HTTP_404_NOT_FOUND) 
+        serializer = WallSerializer(queryset,
+                                many=True,
+                                context={'request': request}) #should return a list of wallls
+                                                              #if empty we handle this on frontend we should still return an empty set. 
+        return Response(serializer.data) 
